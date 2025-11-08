@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ChatInterface } from '@/components/Agent/ChatInterface';
-import { Message, UserProfile, Question } from '@/types';
-import { questions, getNextQuestion, updateProfile } from '@/lib/profileAgent';
-import { Button } from '@/components/ui/Button';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ChatInterface } from "@/components/Agent/ChatInterface";
+import { Message, UserProfile, Question } from "@/types";
+import { questions, getNextQuestion, updateProfile } from "@/lib/profileAgent";
+import { Button } from "@/components/ui/Button";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function EvaluatePage() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function EvaluatePage() {
   const addAgentMessage = (content: string) => {
     const message: Message = {
       id: Date.now().toString(),
-      type: 'agent',
+      type: "agent",
       content,
       timestamp: new Date(),
     };
@@ -40,8 +40,8 @@ export default function EvaluatePage() {
   const addUserMessage = (content: string) => {
     const message: Message = {
       id: Date.now().toString(),
-      type: 'user',
-      content: Array.isArray(content) ? content.join(', ') : content,
+      type: "user",
+      content: Array.isArray(content) ? content.join(", ") : content,
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, message]);
@@ -51,16 +51,17 @@ export default function EvaluatePage() {
     if (isProcessing || !currentQuestion) return;
 
     setIsProcessing(true);
-    
-    // Add user message
-    addUserMessage(answer);
+
+    // Add user message immediately for instant feedback
+    addUserMessage(Array.isArray(answer) ? answer.join(", ") : answer);
 
     // Update profile
     const updatedProfile = updateProfile(profile, currentQuestion, answer);
     setProfile(updatedProfile);
 
-    // Simulate AI processing delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    // Reduced AI processing delay for better responsiveness (was 800ms)
+    // Using shorter delay for snappier feel
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     // Move to next question
     const nextIndex = currentQuestionIndex + 1;
@@ -78,17 +79,18 @@ export default function EvaluatePage() {
       addAgentMessage(
         "Excellent! I've gathered all the information I need. Let me analyze your profile and find the best university matches for you..."
       );
-      
-      // Redirect to results after a delay
+
+      // Redirect to results after a shorter delay
       setTimeout(() => {
-        router.push('/results');
-      }, 2000);
+        router.push("/results");
+      }, 1500);
     }
 
     setIsProcessing(false);
   };
 
-  const progress = ((currentQuestionIndex + (isComplete ? 1 : 0)) / questions.length) * 100;
+  const progress =
+    ((currentQuestionIndex + (isComplete ? 1 : 0)) / questions.length) * 100;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -109,12 +111,16 @@ export default function EvaluatePage() {
       </nav>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden" style={{ minHeight: '600px' }}>
+        <div
+          className="bg-white rounded-2xl shadow-lg overflow-hidden"
+          style={{ minHeight: "600px" }}
+        >
           <div className="h-full flex flex-col">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
               <h1 className="text-2xl font-bold mb-2">AI Profile Evaluation</h1>
               <p className="text-blue-100">
-                Answer a few questions to get personalized university recommendations
+                Answer a few questions to get personalized university
+                recommendations
               </p>
             </div>
 

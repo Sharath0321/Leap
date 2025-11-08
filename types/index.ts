@@ -1,7 +1,7 @@
 export interface UserProfile {
   academicBackground?: {
-    degree: string;
-    field: string;
+    degree?: string;
+    field?: string;
     gpa?: string;
   };
   preferredCountries?: string[];
