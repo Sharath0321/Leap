@@ -138,4 +138,4 @@ This is a prototype project for demonstration purposes.
 
 ## Contact
 
-For questions or feedback, please contact the LeapScholar team.
+Sharath Kumar https://sharathkumar.tech
